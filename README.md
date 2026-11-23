@@ -10,17 +10,9 @@
 
 ---
 
-## Screenshots (720×720 Native BlackBerry Resolution)
-
 <div align="center">
-  <img src="docs/screenshots/screenshot_player_720x720.png" width="350" alt="MusicBB Now Playing Screen (720x720)" />
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="docs/screenshots/screenshot_tracks_720x720.png" width="350" alt="MusicBB Tracks Library Screen (720x720)" />
+  <img src="docs/screenshot.jpg" width="420" alt="MusicBB Running on BlackBerry 10" />
 </div>
-
-<p align="center">
-  <sub><strong>Left:</strong> Now Playing screen with permanent album art, Space Grotesk typography, and vector controls.<br/><strong>Right:</strong> Library tracks browser with real-time search, play counters, and navigation tabs.</sub>
-</p>
 
 ---
 
@@ -66,9 +58,9 @@ Navigate and control playback without touching the screen:
 ### 1. Player (Now Playing)
 - 160×160 hero album art frame with procedural vinyl fallback.
 - Marquee scrolling track title and artist/album metadata.
-- Dynamic bitrate & replay badge (`320 KBPS · 14 PLAYS`).
+- Dynamic bitrate & replay badge (`320 KBPS · 1 PLAYS`).
 - Tactile transport controls (tactile white center pill for play/pause, dedicated shuffle & repeat toggles).
-- One-tap `★ FAVORITE` and `+ PLAYLIST` actions.
+- One-tap `☆ FAVORITE` and `+ PLAYLIST` actions.
 
 ### 2. Tracks (Library)
 - High-speed local media scanner for internal storage (`/sdcard/Music`) and MicroSD cards.
