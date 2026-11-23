@@ -10,6 +10,20 @@
 
 ---
 
+## Screenshots (720×720 Native BlackBerry Resolution)
+
+<div align="center">
+  <img src="docs/screenshots/screenshot_player_720x720.png" width="350" alt="MusicBB Now Playing Screen (720x720)" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="docs/screenshots/screenshot_tracks_720x720.png" width="350" alt="MusicBB Tracks Library Screen (720x720)" />
+</div>
+
+<p align="center">
+  <sub><strong>Left:</strong> Now Playing screen with permanent album art, Space Grotesk typography, and vector controls.<br/><strong>Right:</strong> Library tracks browser with real-time search, play counters, and navigation tabs.</sub>
+</p>
+
+---
+
 ## Overview
 
 **MusicBB** is a dedicated offline music player designed from the ground up to respect the unique hardware of square BlackBerry devices. Built with a pure Android API 18 runtime, zero heavy frameworks, and zero cloud tracking, it delivers a tactile, high-contrast listening experience that feels like a piece of vintage audio hardware in your pocket.
