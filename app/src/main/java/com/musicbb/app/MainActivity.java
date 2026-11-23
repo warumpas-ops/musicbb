@@ -54,8 +54,9 @@ public class MainActivity extends Activity {
     private TextView tvTrackTitle, tvTrackArtist;
     private SeekBar sbProgress;
     private TextView tvCurrTime, tvTotTime;
-    private TextView btnPrev, btnPlay, btnNext;
-    private TextView btnShuffle, btnRepeat, btnFav, btnAddPlaylist;
+    private ImageView btnPrev, btnPlay, btnNext;
+    private ImageView btnShuffle, btnRepeat;
+    private TextView btnFav, btnAddPlaylist;
 
     // Tab 2: Folders & Library Views
     private TextView tvDirBreadcrumb, btnScanMedia, tvEmptyLibrary;
@@ -172,11 +173,11 @@ public class MainActivity extends Activity {
         sbProgress = (SeekBar) findViewById(R.id.sbProgress);
         tvCurrTime = (TextView) findViewById(R.id.tvCurrTime);
         tvTotTime = (TextView) findViewById(R.id.tvTotTime);
-        btnPrev = (TextView) findViewById(R.id.btnPrev);
-        btnPlay = (TextView) findViewById(R.id.btnPlay);
-        btnNext = (TextView) findViewById(R.id.btnNext);
-        btnShuffle = (TextView) findViewById(R.id.btnShuffle);
-        btnRepeat = (TextView) findViewById(R.id.btnRepeat);
+        btnPrev = (ImageView) findViewById(R.id.btnPrev);
+        btnPlay = (ImageView) findViewById(R.id.btnPlay);
+        btnNext = (ImageView) findViewById(R.id.btnNext);
+        btnShuffle = (ImageView) findViewById(R.id.btnShuffle);
+        btnRepeat = (ImageView) findViewById(R.id.btnRepeat);
         btnFav = (TextView) findViewById(R.id.btnFav);
         btnAddPlaylist = (TextView) findViewById(R.id.btnAddPlaylist);
 
@@ -390,27 +391,29 @@ public class MainActivity extends Activity {
             ivCoverArt.setImageBitmap(CoverArtHelper.getDefaultVinylArt("NO TRACK", "", 320));
         }
 
-        // Play / Pause button
+                // Play / Pause button
         if (isPlaying) {
-            btnPlay.setText("❚❚");
+            btnPlay.setImageResource(R.drawable.ic_pause);
         } else {
-            btnPlay.setText("▶");
+            btnPlay.setImageResource(R.drawable.ic_play);
         }
         btnPlay.setBackgroundResource(R.drawable.btn_play_bg);
-        btnPlay.setTextColor(0xFF0A0A0C);
 
         // Shuffle button
-        btnShuffle.setText("SHF");
-        btnShuffle.setTextColor(audioService.isShuffle() ? 0xFFFFFFFF : 0xFF71717A);
+        btnShuffle.setImageResource(audioService.isShuffle() ? R.drawable.ic_shuffle_active : R.drawable.ic_shuffle);
         btnShuffle.setBackgroundResource(audioService.isShuffle() ? R.drawable.control_pill_active : R.drawable.control_pill_selector);
 
         // Repeat button
         int rep = audioService.getRepeatMode();
-        btnRepeat.setText(rep == 1 ? "1x" : "RPT");
-        btnRepeat.setTextColor(rep < 2 ? 0xFFFFFFFF : 0xFF71717A);
+        if (rep == 1) {
+            btnRepeat.setImageResource(R.drawable.ic_repeat_one);
+        } else if (rep == 0) {
+            btnRepeat.setImageResource(R.drawable.ic_repeat_active);
+        } else {
+            btnRepeat.setImageResource(R.drawable.ic_repeat);
+        }
         btnRepeat.setBackgroundResource(rep < 2 ? R.drawable.control_pill_active : R.drawable.control_pill_selector);
     }
-
     // ==================== LIBRARY & SCANNER ====================
 
     private void loadLibraryData() {

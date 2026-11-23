@@ -154,59 +154,53 @@
                 android:gravity="center"
                 android:layout_marginTop="4dp">
 
-                <TextView
+                <ImageView
                     android:id="@+id/btnShuffle"
                     android:layout_width="40dp"
                     android:layout_height="32dp"
-                    android:text="SHF"
-                    android:textColor="@color/text_muted"
-                    android:textSize="15sp"
-                    android:gravity="center"
+                    android:src="@drawable/ic_shuffle"
+                    android:scaleType="centerInside"
+                    android:padding="6dp"
                     android:background="@drawable/control_pill_selector"/>
 
-                <TextView
+                <ImageView
                     android:id="@+id/btnPrev"
                     android:layout_width="48dp"
                     android:layout_height="34dp"
-                    android:text="|&lt;&lt;"
-                    android:textColor="@color/text_primary"
-                    android:textSize="15sp"
-                    android:gravity="center"
+                    android:src="@drawable/ic_prev"
+                    android:scaleType="centerInside"
+                    android:padding="6dp"
                     android:background="@drawable/control_pill_selector"
                     android:layout_marginLeft="10dp"/>
 
-                <TextView
+                <ImageView
                     android:id="@+id/btnPlay"
                     android:layout_width="68dp"
                     android:layout_height="36dp"
-                    android:text="&#x25B6;"
-                    android:textColor="#0A0A0C"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:gravity="center"
+                    android:src="@drawable/ic_play"
+                    android:scaleType="centerInside"
+                    android:padding="7dp"
                     android:background="@drawable/btn_play_bg"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"/>
 
-                <TextView
+                <ImageView
                     android:id="@+id/btnNext"
                     android:layout_width="48dp"
                     android:layout_height="34dp"
-                    android:text="&gt;&gt;|"
-                    android:textColor="@color/text_primary"
-                    android:textSize="15sp"
-                    android:gravity="center"
+                    android:src="@drawable/ic_next"
+                    android:scaleType="centerInside"
+                    android:padding="6dp"
                     android:background="@drawable/control_pill_selector"
                     android:layout_marginRight="10dp"/>
 
-                <TextView
+                <ImageView
                     android:id="@+id/btnRepeat"
                     android:layout_width="40dp"
                     android:layout_height="32dp"
-                    android:text="RPT"
-                    android:textColor="@color/text_muted"
-                    android:textSize="15sp"
-                    android:gravity="center"
+                    android:src="@drawable/ic_repeat"
+                    android:scaleType="centerInside"
+                    android:padding="6dp"
                     android:background="@drawable/control_pill_selector"/>
             </LinearLayout>
 
