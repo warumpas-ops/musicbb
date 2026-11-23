@@ -475,9 +475,9 @@ public class MainActivity extends Activity {
 
     private void loadPlaylistsTab() {
         List<Playlist> smartAndCustom = new ArrayList<Playlist>();
-        smartAndCustom.add(new Playlist(-1, "🔥 Most Played", 0, db.getMostPlayedSongs(25).size(), true));
-        smartAndCustom.add(new Playlist(-2, "★ Favorites", 0, db.getFavoriteSongs().size(), true));
-        smartAndCustom.add(new Playlist(-3, "🕒 Recently Played", 0, db.getRecentlyPlayedSongs(50).size(), true));
+        smartAndCustom.add(new Playlist(-1, "Top Played", 0, db.getMostPlayedSongs(25).size(), true));
+        smartAndCustom.add(new Playlist(-2, "Favorites", 0, db.getFavoriteSongs().size(), true));
+        smartAndCustom.add(new Playlist(-3, "Recently Played", 0, db.getRecentlyPlayedSongs(50).size(), true));
         smartAndCustom.addAll(db.getAllCustomPlaylists());
 
         lvPlaylists.setAdapter(new PlaylistAdapter(this, smartAndCustom));
@@ -583,6 +583,7 @@ public class MainActivity extends Activity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
                     convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_top_song, parent, false);
+                    FontHelper.apply(convertView, getContext());
                 }
                 Song s = getItem(position);
                 TextView tvRank = (TextView) convertView.findViewById(R.id.tvRank);
@@ -722,7 +723,7 @@ public class MainActivity extends Activity {
             artist.setText(s.getArtistAlbumString() + " · " + s.getFormattedDuration());
 
             if (s.playCount > 0) {
-                plays.setText("🔥 " + s.playCount);
+                plays.setText(s.playCount + " plays");
                 plays.setVisibility(View.VISIBLE);
             } else {
                 plays.setVisibility(View.GONE);
