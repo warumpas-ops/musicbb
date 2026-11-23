@@ -33,6 +33,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import com.musicbb.app.FontHelper;
 
 public class MainActivity extends Activity {
 
@@ -123,6 +124,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FontHelper.apply(getWindow().getDecorView(), this);
 
         db = new MusicDatabaseHelper(this);
 
@@ -398,13 +400,13 @@ public class MainActivity extends Activity {
         btnPlay.setTextColor(0xFF0A0A0C);
 
         // Shuffle button
-        btnShuffle.setText("⇄");
+        btnShuffle.setText("SHF");
         btnShuffle.setTextColor(audioService.isShuffle() ? 0xFFFFFFFF : 0xFF71717A);
         btnShuffle.setBackgroundResource(audioService.isShuffle() ? R.drawable.control_pill_active : R.drawable.control_pill_selector);
 
         // Repeat button
         int rep = audioService.getRepeatMode();
-        btnRepeat.setText(rep == 1 ? "1" : "↻");
+        btnRepeat.setText(rep == 1 ? "1x" : "RPT");
         btnRepeat.setTextColor(rep < 2 ? 0xFFFFFFFF : 0xFF71717A);
         btnRepeat.setBackgroundResource(rep < 2 ? R.drawable.control_pill_active : R.drawable.control_pill_selector);
     }
