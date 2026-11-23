@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:background="@drawable/row_selector">
+
+    <TextView
+        android:id="@+id/tvRank"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:textColor="#A8D8A8"
+        android:textSize="13sp"
+        android:typeface="monospace"
+        android:textStyle="bold"
+        android:text="#1"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTopTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#E0E2E6"
+            android:textSize="13sp"
+            android:typeface="monospace"
+            android:singleLine="true"
+            android:ellipsize="end"/>
+
+        <TextView
+            android:id="@+id/tvTopArtist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#555A64"
+            android:textSize="10sp"
+            android:typeface="monospace"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_marginTop="1dp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvTopPlays"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#A8D8A8"
+        android:textSize="11sp"
+        android:typeface="monospace"
+        android:textStyle="bold"
+        android:paddingLeft="8dp"/>
+</LinearLayout>

@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- activity_main.xml — MusicBB Main Square Interface for BlackBerry Q5 (720x720) -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0D0F11">
+
+    <!-- Top Header & Tabs Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:background="#08090A">
+
+        <TextView
+            android:id="@+id/tvLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="musicbb"
+            android:textColor="#A8D8A8"
+            android:textSize="15sp"
+            android:typeface="monospace"
+            android:textStyle="bold"
+            android:background="@drawable/row_selector"
+            android:padding="4dp"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <!-- 4 Navigation Tabs -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/btnTabNow"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:text="[now]"
+                android:textColor="#A8D8A8"
+                android:textSize="11sp"
+                android:typeface="monospace"
+                android:gravity="center"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:background="@drawable/row_selector"/>
+
+            <TextView
+                android:id="@+id/btnTabFolders"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:text="[folders]"
+                android:textColor="#555A64"
+                android:textSize="11sp"
+                android:typeface="monospace"
+                android:gravity="center"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:background="@drawable/row_selector"/>
+
+            <TextView
+                android:id="@+id/btnTabPlaylists"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:text="[lists]"
+                android:textColor="#555A64"
+                android:textSize="11sp"
+                android:typeface="monospace"
+                android:gravity="center"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:background="@drawable/row_selector"/>
+
+            <TextView
+                android:id="@+id/btnTabStats"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:text="[stats]"
+                android:textColor="#555A64"
+                android:textSize="11sp"
+                android:typeface="monospace"
+                android:gravity="center"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:background="@drawable/row_selector"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#1E2126"/>
+
+    <!-- MAIN CONTENT FRAME -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- ==================== TAB 1: NOW PLAYING ==================== -->
+        <LinearLayout
+            android:id="@+id/tabNowPlaying"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="4dp">
+
+            <!-- Mode Switch Header: [cover] | [spectrum vu] -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingBottom="4dp">
+
+                <TextView
+                    android:id="@+id/tvTrackBitrate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="320 KBPS · 🔥 0 PLAYS"
+                    android:textColor="#555A64"
+                    android:textSize="10sp"
+                    android:typeface="monospace"/>
+
+                <TextView
+                    android:id="@+id/btnToggleCoverMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[C: SWITCH ART/VU]"
+                    android:textColor="#A8D8A8"
+                    android:textSize="10sp"
+                    android:typeface="monospace"
+                    android:background="@drawable/row_selector"
+                    android:padding="2dp"/>
+            </LinearLayout>
+
+            <!-- Centered Artwork / Visualizer Container -->
+            <FrameLayout
+                android:id="@+id/layoutArtContainer"
+                android:layout_width="210dp"
+                android:layout_height="210dp"
+                android:background="@drawable/cover_border"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="4dp">
+
+                <!-- Real Album Cover Art -->
+                <ImageView
+                    android:id="@+id/ivCoverArt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"/>
+
+                <!-- Audio Spectrum Visualizer -->
+                <com.musicbb.app.VisualizerView
+                    android:id="@+id/visualizerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"/>
+
+                <!-- Fallback Retro Cassette Graphic when no art or initial state -->
+                <LinearLayout
+                    android:id="@+id/layoutCassetteFallback"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="┌────────────────┐"
+                        android:textColor="#555A64"
+                        android:textSize="11sp"
+                        android:typeface="monospace"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="│ (O) ======== (O) │"
+                        android:textColor="#A8D8A8"
+                        android:textSize="11sp"
+                        android:typeface="monospace"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="│  MUSICBB STEREO  │"
+                        android:textColor="#555A64"
+                        android:textSize="10sp"
+                        android:typeface="monospace"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="└────────────────┘"
+                        android:textColor="#555A64"
+                        android:textSize="11sp"
+                        android:typeface="monospace"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="[tap cover for VU]"
+                        android:textColor="#555A64"
+                        android:textSize="9sp"
+                        android:typeface="monospace"
+                        android:layout_marginTop="6dp"/>
+                </LinearLayout>
+            </FrameLayout>
+
+            <!-- Song Title and Artist -->
+            <TextView
+                android:id="@+id/tvTrackTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="no track selected"
+                android:textColor="#E0E2E6"
+                android:textSize="15sp"
+                android:typeface="monospace"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:layout_marginTop="2dp"/>
+
+            <TextView
+                android:id="@+id/tvTrackArtist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="select a song from folders"
+                android:textColor="#555A64"
+                android:textSize="12sp"
+                android:typeface="monospace"
+                android:gravity="center"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:layout_marginTop="2dp"/>
+
+            <!-- Progress Scrubber -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="6dp">
+
+                <SeekBar
+                    android:id="@+id/sbProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:max="1000"
+                    android:progressDrawable="@drawable/seek_progress"
+                    android:thumb="@drawable/seek_thumb"
+                    android:paddingLeft="6dp"
+                    android:paddingRight="6dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvCurrTime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="00:00"
+                        android:textColor="#555A64"
+                        android:textSize="11sp"
+                        android:typeface="monospace"/>
+
+                    <TextView
+                        android:id="@+id/tvTotTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="00:00"
+                        android:textColor="#555A64"
+                        android:textSize="11sp"
+                        android:typeface="monospace"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Primary Playback Controls -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="6dp">
+
+                <TextView
+                    android:id="@+id/btnPrev"
+                    android:layout_width="60dp"
+                    android:layout_height="38dp"
+                    android:text="[⏮ P]"
+                    android:textColor="#555A64"
+                    android:textSize="14sp"
+                    android:typeface="monospace"
+                    android:gravity="center"
+                    android:background="@drawable/row_selector"/>
+
+                <TextView
+                    android:id="@+id/btnPlay"
+                    android:layout_width="120dp"
+                    android:layout_height="38dp"
+                    android:text="▶ PLAY"
+                    android:textColor="#0D0F11"
+                    android:textSize="14sp"
+                    android:typeface="monospace"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:background="@drawable/btn_accent"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"/>
+
+                <TextView
+                    android:id="@+id/btnNext"
+                    android:layout_width="60dp"
+                    android:layout_height="38dp"
+                    android:text="[N ⏭]"
+                    android:textColor="#555A64"
+                    android:textSize="14sp"
+                    android:typeface="monospace"
+                    android:gravity="center"
+                    android:background="@drawable/row_selector"/>
+            </LinearLayout>
+
+            <!-- Bottom Sub-Toggles -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="6dp"
+                android:paddingTop="4dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp">
+
+                <TextView
+                    android:id="@+id/btnShuffle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[S] SHUF: OFF"
+                    android:textColor="#555A64"
+                    android:textSize="10sp"
+                    android:typeface="monospace"
+                    android:background="@drawable/row_selector"
+                    android:padding="4dp"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/btnRepeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[R] REP: ALL"
+                    android:textColor="#555A64"
+                    android:textSize="10sp"
+                    android:typeface="monospace"
+                    android:background="@drawable/row_selector"
+                    android:padding="4dp"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/btnFav"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="☆ [FAV]"
+                    android:textColor="#555A64"
+                    android:textSize="10sp"
+                    android:typeface="monospace"
+                    android:background="@drawable/row_selector"
+                    android:padding="4dp"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/btnAddPlaylist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[+ list]"
+                    android:textColor="#A8D8A8"
+                    android:textSize="10sp"
+                    android:typeface="monospace"
+                    android:background="@drawable/row_selector"
+                    android:padding="4dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <!-- ==================== TAB 2: BROWSE / FOLDERS ==================== -->
+        <LinearLayout
+            android:id="@+id/tabFolders"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- Directory Toolbar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:background="#121417">
+
+                <TextView
+                    android:id="@+id/tvDirBreadcrumb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="/sdcard/Music/"
+                    android:textColor="#555A64"
+                    android:textSize="11sp"
+                    android:typeface="monospace"
+                    android:singleLine="true"/>
+
+                <TextView
+                    android:id="@+id/btnScanMedia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[+ scan]"
+                    android:textColor="#A8D8A8"
+                    android:textSize="11sp"
+                    android:typeface="monospace"
+                    android:background="@drawable/row_selector"
+                    android:padding="4dp"/>
+            </LinearLayout>
+
+            <!-- Search box -->
+            <EditText
+                android:id="@+id/etSearch"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:background="#16191D"
+                android:textColor="#E0E2E6"
+                android:textColorHint="#555A64"
+                android:textSize="12sp"
+                android:typeface="monospace"
+                android:hint="type to filter songs [F]..."
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:singleLine="true"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#1E2126"/>
+
+            <!-- Song List -->
+            <ListView
+                android:id="@+id/lvLibrary"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:divider="#1E2126"
+                android:dividerHeight="1dp"/>
+
+            <TextView
+                android:id="@+id/tvEmptyLibrary"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="-- no songs found --\n\nput .mp3 or .flac in /sdcard/Music\nthen tap [+ scan]"
+                android:textColor="#555A64"
+                android:textSize="13sp"
+                android:typeface="monospace"
+                android:gravity="center"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+
+        <!-- ==================== TAB 3: PLAYLISTS ==================== -->
+        <LinearLayout
+            android:id="@+id/tabPlaylists"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:background="#121417">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="PLAYLISTS"
+                    android:textColor="#E0E2E6"
+                    android:textSize="12sp"
+                    android:typeface="monospace"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/btnNewPlaylist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[+ new list]"
+                    android:textColor="#A8D8A8"
+                    android:textSize="11sp"
+                    android:typeface="monospace"
+                    android:background="@drawable/row_selector"
+                    android:padding="4dp"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#1E2126"/>
+
+            <ListView
+                android:id="@+id/lvPlaylists"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="#1E2126"
+                android:dividerHeight="1dp"/>
+        </LinearLayout>
+
+
+        <!-- ==================== TAB 4: STATS & MOST PLAYED ==================== -->
+        <LinearLayout
+            android:id="@+id/tabStats"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:padding="12dp">
+
+            <!-- Summary metrics -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="#121417"
+                    android:padding="8dp"
+                    android:gravity="center"
+                    android:layout_marginRight="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TOTAL PLAYS"
+                        android:textColor="#555A64"
+                        android:textSize="9sp"
+                        android:typeface="monospace"/>
+
+                    <TextView
+                        android:id="@+id/tvStatTotalPlays"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="#A8D8A8"
+                        android:textSize="18sp"
+                        android:typeface="monospace"
+                        android:textStyle="bold"
+                        android:layout_marginTop="2dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="#121417"
+                    android:padding="8dp"
+                    android:gravity="center"
+                    android:layout_marginLeft="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TIME LISTENED"
+                        android:textColor="#555A64"
+                        android:textSize="9sp"
+                        android:typeface="monospace"/>
+
+                    <TextView
+                        android:id="@+id/tvStatTotalHours"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0.0 hrs"
+                        android:textColor="#E0E2E6"
+                        android:textSize="18sp"
+                        android:typeface="monospace"
+                        android:textStyle="bold"
+                        android:layout_marginTop="2dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MOST REPLAYED TRACKS:"
+                android:textColor="#555A64"
+                android:textSize="10sp"
+                android:typeface="monospace"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="6dp"/>
+
+            <ListView
+                android:id="@+id/lvTopTracks"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:divider="#1E2126"
+                android:dividerHeight="1dp"/>
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- Bottom Keyboard Shortcut Bar -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#1E2126"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:background="#08090A">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="[SPACE] Play"
+            android:textColor="#555A64"
+            android:textSize="9sp"
+            android:typeface="monospace"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="[N/P] Skip"
+            android:textColor="#555A64"
+            android:textSize="9sp"
+            android:typeface="monospace"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="[C] Cover/VU"
+            android:textColor="#555A64"
+            android:textSize="9sp"
+            android:typeface="monospace"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="[L] Lists"
+            android:textColor="#555A64"
+            android:textSize="9sp"
+            android:typeface="monospace"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="[T] Stats"
+            android:textColor="#555A64"
+            android:textSize="9sp"
+            android:typeface="monospace"/>
+    </LinearLayout>
+</LinearLayout>
