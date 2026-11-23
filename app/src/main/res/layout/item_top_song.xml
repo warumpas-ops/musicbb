@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
+    android:layout_height="46dp"
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:paddingLeft="12dp"
@@ -10,11 +10,10 @@
 
     <TextView
         android:id="@+id/tvRank"
-        android:layout_width="32dp"
+        android:layout_width="28dp"
         android:layout_height="wrap_content"
-        android:textColor="#A8D8A8"
-        android:textSize="13sp"
-        android:typeface="monospace"
+        android:textColor="@color/text_primary"
+        android:textSize="12sp"
         android:textStyle="bold"
         android:text="#1"/>
 
@@ -28,9 +27,9 @@
             android:id="@+id/tvTopTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#E0E2E6"
+            android:textColor="@color/text_primary"
             android:textSize="13sp"
-            android:typeface="monospace"
+            android:textStyle="bold"
             android:singleLine="true"
             android:ellipsize="end"/>
 
@@ -38,9 +37,8 @@
             android:id="@+id/tvTopArtist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#555A64"
+            android:textColor="@color/text_muted"
             android:textSize="10sp"
-            android:typeface="monospace"
             android:singleLine="true"
             android:ellipsize="end"
             android:layout_marginTop="1dp"/>
@@ -50,9 +48,12 @@
         android:id="@+id/tvTopPlays"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#A8D8A8"
-        android:textSize="11sp"
-        android:typeface="monospace"
-        android:textStyle="bold"
-        android:paddingLeft="8dp"/>
+        android:textColor="@color/text_secondary"
+        android:textSize="10sp"
+        android:background="@drawable/badge_bg"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:layout_marginLeft="6dp"/>
 </LinearLayout>

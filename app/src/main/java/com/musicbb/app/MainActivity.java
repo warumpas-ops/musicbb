@@ -40,20 +40,16 @@ public class MainActivity extends Activity {
     private AudioService audioService;
     private boolean isBound = false;
 
-    // Active Tab State (0=Now, 1=Folders, 2=Lists, 3=Stats)
+    // Active Tab State (0=Now, 1=Tracks, 2=Lists, 3=Stats)
     private int currentTab = 0;
-    private boolean isShowingVisualizer = false;
 
     // Header & Tabs
     private TextView tvLogo, btnTabNow, btnTabFolders, btnTabPlaylists, btnTabStats;
     private LinearLayout tabNowPlaying, tabFolders, tabPlaylists, tabStats;
 
     // Tab 1: Now Playing Views
-    private TextView tvTrackBitrate, btnToggleCoverMode;
-    private FrameLayout layoutArtContainer;
+    private TextView tvTrackBitrate;
     private ImageView ivCoverArt;
-    private VisualizerView visualizerView;
-    private LinearLayout layoutCassetteFallback;
     private TextView tvTrackTitle, tvTrackArtist;
     private SeekBar sbProgress;
     private TextView tvCurrTime, tvTotTime;
@@ -168,11 +164,7 @@ public class MainActivity extends Activity {
 
         // Tab 1: Now Playing
         tvTrackBitrate = (TextView) findViewById(R.id.tvTrackBitrate);
-        btnToggleCoverMode = (TextView) findViewById(R.id.btnToggleCoverMode);
-        layoutArtContainer = (FrameLayout) findViewById(R.id.layoutArtContainer);
         ivCoverArt = (ImageView) findViewById(R.id.ivCoverArt);
-        visualizerView = (VisualizerView) findViewById(R.id.visualizerView);
-        layoutCassetteFallback = (LinearLayout) findViewById(R.id.layoutCassetteFallback);
         tvTrackTitle = (TextView) findViewById(R.id.tvTrackTitle);
         tvTrackArtist = (TextView) findViewById(R.id.tvTrackArtist);
         sbProgress = (SeekBar) findViewById(R.id.sbProgress);
@@ -255,8 +247,8 @@ public class MainActivity extends Activity {
                 if (audioService != null && audioService.getCurrentSong() != null) {
                     Song s = audioService.getCurrentSong();
                     s.isFavorite = db.toggleFavorite(s.id);
-                    btnFav.setText(s.isFavorite ? "★ [FAVORITE]" : "☆ [FAV]");
-                    btnFav.setTextColor(s.isFavorite ? 0xFFA8D8A8 : 0xFF555A64);
+                    btnFav.setText(s.isFavorite ? "★ FAVORITE" : "☆ FAVORITE");
+                    btnFav.setTextColor(s.isFavorite ? 0xFFF59E0B : 0xFF71717A);
                 }
             }
         });
@@ -268,16 +260,6 @@ public class MainActivity extends Activity {
                 }
             }
         });
-
-        // Cover / Visualizer Toggle
-        View.OnClickListener toggleCoverListener = new View.OnClickListener() {
-            public void onClick(View v) {
-                isShowingVisualizer = !isShowingVisualizer;
-                applyCoverMode();
-            }
-        };
-        btnToggleCoverMode.setOnClickListener(toggleCoverListener);
-        layoutArtContainer.setOnClickListener(toggleCoverListener);
 
         // Scrubber SeekBar
         sbProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -345,10 +327,15 @@ public class MainActivity extends Activity {
         tabPlaylists.setVisibility(index == 2 ? View.VISIBLE : View.GONE);
         tabStats.setVisibility(index == 3 ? View.VISIBLE : View.GONE);
 
-        btnTabNow.setTextColor(index == 0 ? 0xFFA8D8A8 : 0xFF555A64);
-        btnTabFolders.setTextColor(index == 1 ? 0xFFA8D8A8 : 0xFF555A64);
-        btnTabPlaylists.setTextColor(index == 2 ? 0xFFA8D8A8 : 0xFF555A64);
-        btnTabStats.setTextColor(index == 3 ? 0xFFA8D8A8 : 0xFF555A64);
+        btnTabNow.setTextColor(index == 0 ? 0xFFF4F4F6 : 0xFF71717A);
+        btnTabFolders.setTextColor(index == 1 ? 0xFFF4F4F6 : 0xFF71717A);
+        btnTabPlaylists.setTextColor(index == 2 ? 0xFFF4F4F6 : 0xFF71717A);
+        btnTabStats.setTextColor(index == 3 ? 0xFFF4F4F6 : 0xFF71717A);
+
+        btnTabNow.setBackgroundResource(index == 0 ? R.drawable.tab_selected_bg : R.drawable.row_selector);
+        btnTabFolders.setBackgroundResource(index == 1 ? R.drawable.tab_selected_bg : R.drawable.row_selector);
+        btnTabPlaylists.setBackgroundResource(index == 2 ? R.drawable.tab_selected_bg : R.drawable.row_selector);
+        btnTabStats.setBackgroundResource(index == 3 ? R.drawable.tab_selected_bg : R.drawable.row_selector);
 
         if (index == 0) {
             updateNowPlayingUI();
@@ -380,73 +367,46 @@ public class MainActivity extends Activity {
                 s.isFavorite = dbSong.isFavorite;
             }
 
-            tvTrackBitrate.setText(String.format(Locale.US, "320 KBPS · 🔥 %d PLAYS", s.playCount));
-            btnFav.setText(s.isFavorite ? "★ [FAVORITE]" : "☆ [FAV]");
-            btnFav.setTextColor(s.isFavorite ? 0xFFA8D8A8 : 0xFF555A64);
+            tvTrackBitrate.setText(String.format(Locale.US, "320 KBPS · %d PLAYS", s.playCount));
+            btnFav.setText(s.isFavorite ? "★ FAVORITE" : "☆ FAVORITE");
+            btnFav.setTextColor(s.isFavorite ? 0xFFF59E0B : 0xFF71717A);
 
             int dur = audioService.getDuration();
             if (dur > 0) tvTotTime.setText(formatMs(dur));
 
-            // Load Cover Art
+            // Load Permanent Cover Art
             Bitmap art = CoverArtHelper.getCoverArt(s.filePath, 320);
             if (art != null) {
-                ivCoverArt.setImageBitmap(art);
-                ivCoverArt.setTag("has_art");
+                ivCoverArt.setImageBitmap(CoverArtHelper.getRoundedBitmap(art, 20));
             } else {
-                ivCoverArt.setImageBitmap(null);
-                ivCoverArt.setTag(null);
+                ivCoverArt.setImageBitmap(CoverArtHelper.getDefaultVinylArt(s.title, s.artist, 320));
             }
         } else {
-            tvTrackTitle.setText("no track selected");
-            tvTrackArtist.setText("select a song from folders");
-            tvTrackBitrate.setText("STEREO AUDIO ENGINE");
-            ivCoverArt.setTag(null);
+            tvTrackTitle.setText("No Track Selected");
+            tvTrackArtist.setText("Select a song from tracks");
+            tvTrackBitrate.setText("STEREO AUDIO");
+            ivCoverArt.setImageBitmap(CoverArtHelper.getDefaultVinylArt("NO TRACK", "", 320));
         }
-
-        applyCoverMode();
 
         // Play / Pause button
         if (isPlaying) {
-            btnPlay.setText("⏸ PAUSE");
-            btnPlay.setBackgroundResource(R.drawable.btn_accent);
-            btnPlay.setTextColor(0xFF0D0F11);
-            visualizerView.setPlaying(true);
-            visualizerView.linkAudioSession(audioService.getAudioSessionId());
+            btnPlay.setText("❚❚");
         } else {
-            btnPlay.setText("▶ PLAY");
-            btnPlay.setBackgroundResource(R.drawable.row_selector);
-            btnPlay.setTextColor(0xFFA8D8A8);
-            visualizerView.setPlaying(false);
+            btnPlay.setText("▶");
         }
+        btnPlay.setBackgroundResource(R.drawable.btn_play_bg);
+        btnPlay.setTextColor(0xFF0A0A0C);
 
         // Shuffle button
-        btnShuffle.setText(audioService.isShuffle() ? "[S] SHUF: ON" : "[S] SHUF: OFF");
-        btnShuffle.setTextColor(audioService.isShuffle() ? 0xFFA8D8A8 : 0xFF555A64);
+        btnShuffle.setText("⇄");
+        btnShuffle.setTextColor(audioService.isShuffle() ? 0xFFFFFFFF : 0xFF71717A);
+        btnShuffle.setBackgroundResource(audioService.isShuffle() ? R.drawable.control_pill_active : R.drawable.control_pill_selector);
 
         // Repeat button
         int rep = audioService.getRepeatMode();
-        String repStr = (rep == 0) ? "[R] REP: ALL" : (rep == 1 ? "[R] REP: ONE" : "[R] REP: OFF");
-        btnRepeat.setText(repStr);
-        btnRepeat.setTextColor(rep < 2 ? 0xFFA8D8A8 : 0xFF555A64);
-    }
-
-    private void applyCoverMode() {
-        if (isShowingVisualizer) {
-            ivCoverArt.setVisibility(View.GONE);
-            layoutCassetteFallback.setVisibility(View.GONE);
-            visualizerView.setVisibility(View.VISIBLE);
-            btnToggleCoverMode.setText("[VU: SPECTRUM]");
-        } else {
-            visualizerView.setVisibility(View.GONE);
-            if ("has_art".equals(ivCoverArt.getTag())) {
-                ivCoverArt.setVisibility(View.VISIBLE);
-                layoutCassetteFallback.setVisibility(View.GONE);
-            } else {
-                ivCoverArt.setVisibility(View.GONE);
-                layoutCassetteFallback.setVisibility(View.VISIBLE);
-            }
-            btnToggleCoverMode.setText("[C: ART]");
-        }
+        btnRepeat.setText(rep == 1 ? "1" : "↻");
+        btnRepeat.setTextColor(rep < 2 ? 0xFFFFFFFF : 0xFF71717A);
+        btnRepeat.setBackgroundResource(rep < 2 ? R.drawable.control_pill_active : R.drawable.control_pill_selector);
     }
 
     // ==================== LIBRARY & SCANNER ====================
@@ -668,8 +628,12 @@ public class MainActivity extends Activity {
             if (audioService != null) audioService.seekTo(audioService.getCurrentPosition() + 5000);
             return true;
         } else if (keyCode == KeyEvent.KEYCODE_C) {
-            isShowingVisualizer = !isShowingVisualizer;
-            applyCoverMode();
+            if (audioService != null && audioService.getCurrentSong() != null) {
+                Song s = audioService.getCurrentSong();
+                s.isFavorite = db.toggleFavorite(s.id);
+                btnFav.setText(s.isFavorite ? "★ FAVORITE" : "☆ FAVORITE");
+                btnFav.setTextColor(s.isFavorite ? 0xFFF59E0B : 0xFF71717A);
+            }
             return true;
         } else if (keyCode == KeyEvent.KEYCODE_S) {
             if (audioService != null) audioService.toggleShuffle();
@@ -729,7 +693,6 @@ public class MainActivity extends Activity {
             unbindService(serviceConnection);
             isBound = false;
         }
-        visualizerView.releaseVisualizer();
     }
 
     // Inner Adapter for Song Rows
@@ -760,12 +723,12 @@ public class MainActivity extends Activity {
                 plays.setVisibility(View.GONE);
             }
 
-            // Load mini thumbnail
+            // Load mini thumbnail with rounded corners
             Bitmap b = CoverArtHelper.getCoverArt(s.filePath, 80);
             if (b != null) {
-                thumb.setImageBitmap(b);
+                thumb.setImageBitmap(CoverArtHelper.getRoundedBitmap(b, 8));
             } else {
-                thumb.setImageResource(R.mipmap.ic_launcher);
+                thumb.setImageBitmap(CoverArtHelper.getDefaultVinylArt(s.title, s.artist, 80));
             }
 
             btnOpt.setOnClickListener(new View.OnClickListener() {

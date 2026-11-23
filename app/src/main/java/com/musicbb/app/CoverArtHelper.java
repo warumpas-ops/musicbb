@@ -2,6 +2,12 @@ package com.musicbb.app;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.MediaMetadataRetriever;
 import android.util.LruCache;
 
@@ -56,6 +62,105 @@ public class CoverArtHelper {
             memoryCache.put(cacheKey, bitmap);
         }
         return bitmap;
+    }
+
+    public static Bitmap getDefaultVinylArt(String title, String artist, int size) {
+        String cacheKey = "default_vinyl_" + (title != null ? title : "") + "_" + size;
+        Bitmap cached = memoryCache.get(cacheKey);
+        if (cached != null) return cached;
+
+        Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+
+        float cx = size / 2.0f;
+        float cy = size / 2.0f;
+        float radius = size * 0.47f;
+
+        // Vinyl outer disc
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(0xFF131418);
+        canvas.drawCircle(cx, cy, radius, paint);
+
+        // Vinyl outer rim stroke
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(size * 0.015f);
+        paint.setColor(0xFF272932);
+        canvas.drawCircle(cx, cy, radius - size * 0.008f, paint);
+
+        // Concentric audio groove rings
+        paint.setColor(0xFF1B1D23);
+        paint.setStrokeWidth(size * 0.004f);
+        for (float r = radius * 0.50f; r < radius * 0.92f; r += size * 0.045f) {
+            canvas.drawCircle(cx, cy, r, paint);
+        }
+
+        // Center Record Label
+        float labelRadius = radius * 0.44f;
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(0xFF22242C);
+        canvas.drawCircle(cx, cy, labelRadius, paint);
+
+        // Label border ring
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(size * 0.01f);
+        paint.setColor(0xFF383C49);
+        canvas.drawCircle(cx, cy, labelRadius, paint);
+
+        // Center spindle hole
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(0xFF0A0A0C);
+        canvas.drawCircle(cx, cy, labelRadius * 0.20f, paint);
+
+        // Center spindle ring
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(size * 0.006f);
+        paint.setColor(0xFF4A4E5E);
+        canvas.drawCircle(cx, cy, labelRadius * 0.20f, paint);
+
+        // Label Text
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(0xFFF4F4F5);
+        paint.setTextSize(size * 0.055f);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setFakeBoldText(true);
+        canvas.drawText("MUSICBB", cx, cy - labelRadius * 0.42f, paint);
+
+        paint.setColor(0xFFA1A1AA);
+        paint.setTextSize(size * 0.040f);
+        paint.setFakeBoldText(false);
+        String display = (title != null && !title.isEmpty()) ? title : "HI-FI STEREO";
+        if (display.length() > 14) {
+            display = display.substring(0, 12) + "..";
+        }
+        canvas.drawText(display, cx, cy + labelRadius * 0.58f, paint);
+
+        memoryCache.put(cacheKey, bitmap);
+        return bitmap;
+    }
+
+    public static Bitmap getRoundedBitmap(Bitmap bitmap, float radiusPx) {
+        if (bitmap == null) return null;
+        try {
+            Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(output);
+            final Paint paint = new Paint();
+            final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+            final RectF rectF = new RectF(rect);
+
+            paint.setAntiAlias(true);
+            canvas.drawARGB(0, 0, 0, 0);
+            paint.setColor(0xFF000000);
+            canvas.drawRoundRect(rectF, radiusPx, radiusPx, paint);
+
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+            canvas.drawBitmap(bitmap, rect, rect, paint);
+            return output;
+        } catch (Exception e) {
+            return bitmap;
+        }
     }
 
     private static Bitmap findFolderArt(String audioFilePath, int targetSize) {
