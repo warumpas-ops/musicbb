@@ -370,7 +370,11 @@ public class MainActivity extends Activity {
                 s.isFavorite = dbSong.isFavorite;
             }
 
-            tvTrackBitrate.setText(String.format(Locale.US, "320 KBPS · %d PLAYS", s.playCount));
+            if (s.playCount > 0) {
+                tvTrackBitrate.setText(String.format(Locale.US, "320 KBPS · %d× PLAYED", s.playCount));
+            } else {
+                tvTrackBitrate.setText("320 KBPS · NOT PLAYED YET");
+            }
             btnFav.setText(s.isFavorite ? "★ FAVORITE" : "☆ FAVORITE");
             btnFav.setTextColor(s.isFavorite ? 0xFFF59E0B : 0xFF71717A);
 
@@ -594,7 +598,7 @@ public class MainActivity extends Activity {
                 tvRank.setText("#" + (position + 1));
                 tvTitle.setText(s.title);
                 tvArtist.setText(s.getArtistAlbumString());
-                tvPlays.setText(s.playCount + " plays");
+                tvPlays.setText(s.playCount == 1 ? "1 play" : s.playCount + " plays");
 
                 return convertView;
             }
@@ -723,7 +727,7 @@ public class MainActivity extends Activity {
             artist.setText(s.getArtistAlbumString() + " · " + s.getFormattedDuration());
 
             if (s.playCount > 0) {
-                plays.setText(s.playCount + " plays");
+                plays.setText(s.playCount == 1 ? "1 play" : s.playCount + " plays");
                 plays.setVisibility(View.VISIBLE);
             } else {
                 plays.setVisibility(View.GONE);

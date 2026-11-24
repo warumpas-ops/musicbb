@@ -127,6 +127,15 @@ public class MusicDatabaseHelper extends SQLiteOpenHelper {
                 " WHERE id = " + songId);
     }
 
+    // Adds listened time to hours streamed WITHOUT counting it as a full play
+    public void addListenTimeOnly(long songId, int listenSec) {
+        if (listenSec <= 0) return;
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("UPDATE " + TABLE_SONGS +
+                " SET listen_seconds = listen_seconds + " + listenSec +
+                " WHERE id = " + songId);
+    }
+
     public boolean toggleFavorite(long songId) {
         SQLiteDatabase db = getWritableDatabase();
         Cursor c = db.query(TABLE_SONGS, new String[]{"is_favorite"}, "id=?", new String[]{String.valueOf(songId)}, null, null, null);

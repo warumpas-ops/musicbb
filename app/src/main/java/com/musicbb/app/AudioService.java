@@ -129,7 +129,7 @@ public class AudioService extends Service implements
     private void playCurrent() {
         if (currentIndex < 0 || currentIndex >= playQueue.size()) return;
 
-        recordCurrentListenStats();
+        recordCurrentListenStats(false); // switching track → time only, no play count
 
         currentSong = playQueue.get(currentIndex);
         songStartTimeMs = System.currentTimeMillis();
@@ -290,13 +290,20 @@ public class AudioService extends Service implements
 
     // ==================== LISTEN STATS ====================
 
-    private void recordCurrentListenStats() {
+    private void recordCurrentListenStats(boolean completedFully) {
         if (currentSong != null && songStartTimeMs > 0) {
             long durationElapsedSec = (System.currentTimeMillis() - songStartTimeMs) / 1000;
-            // Count as a play if listened to for at least 20 seconds or >50% of track
-            if (durationElapsedSec >= 20) {
+            if (completedFully) {
+                // Song played all the way through → count as a full listen + add time
                 db.incrementPlayCount(currentSong.id, (int) durationElapsedSec);
+            } else {
+                // Song was skipped / interrupted → only add time streamed (no play count bump)
+                // Only bother recording if they listened for at least 30 seconds
+                if (durationElapsedSec >= 30) {
+                    db.addListenTimeOnly(currentSong.id, (int) durationElapsedSec);
+                }
             }
+            songStartTimeMs = 0; // reset so we don't double-record
         }
     }
 
@@ -311,7 +318,7 @@ public class AudioService extends Service implements
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        recordCurrentListenStats();
+        recordCurrentListenStats(true); // fully finished → counts as a play
         if (repeatMode == 1) {
             seekTo(0);
             mp.start();
@@ -401,7 +408,7 @@ public class AudioService extends Service implements
 
     @Override
     public void onDestroy() {
-        recordCurrentListenStats();
+        recordCurrentListenStats(false); // app killed mid-song → time only, no play count
         if (mediaPlayer != null) {
             try { mediaPlayer.release(); } catch (Exception ignored) {}
             mediaPlayer = null;
